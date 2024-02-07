@@ -15,13 +15,21 @@ RETURNS = [2, 2, 2, 2, 2.8, 2.4, 2.17, 2.17, 2.4, 2.8, 1.5, 1.67, 1.83, 1.83, 1.
 DEFAULT_BET = [MIN_BET, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 # Must bet on pass / don't pass line
 
+# Strategies:
+    # [pass, no-pass, come, no-come, p4, p5, p6, p8, p9, p10,
+    #        o4, o5, o6, o8, o9, o10, field (split into 2 for diff returns)]
+    # Size: 17
+    # Strategies work such that the first roll only considers first two
+    # (pass, no-pass). On second roll, it applies all other bets. Field bets
+    # go every roll.
+
 # Simple strategies:
 #    [1.4  1.3  1.4  1.3  6.7  4    1.5  1.5  4    6.7  0                             5.5
 #    [p    np   c    nc   p4   p5   p6   p8   p9   p10  o4   o5   o6   o8   o9   o10  f]
 s1 = [50 , 0  , 0  , 0  , 400, 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0]
 s2 = [50 , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 400, 0  , 0  , 0  , 0  , 0]
 
-# BEST BETS
+# OTHER BETS
 #    [1.4  1.3  1.4  1.3  6.7  4    1.5  1.5  4    6.7  0                             5.5
 #    [p    np   c    nc   p4   p5   p6   p8   p9   p10  o4   o5   o6   o8   o9   o10  f]
 P = [400, 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0]
@@ -35,7 +43,7 @@ O6 = [50 , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 350, 0  , 0  ,
 F = [50 , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 350]
 # bbs = [P,N,P4,P5,P6,O4,O5,O6,F]
 
-# PERCENTAGE OF STARTING MONEY. (percentage of current money strat also?)
+# PERCENTAGE OF STARTING MONEY bet (percentage of current money strat also?)
 #    [1.4  1.3  1.4  1.3  6.7  4    1.5  1.5  4    6.7  0                             5.5
 #    [p    np   c    nc   p4   p5   p6   p8   p9   p10  o4   o5   o6   o8   o9   o10  f]
 m1 = [50, 0  , 0  , 0  , 4000  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0]
@@ -50,7 +58,7 @@ m9 = [50, 0  , 0  , 0  , 850  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  
 m10 = [50, 0  , 0  , 0  , 950  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0]
 bbs = [m1,m2,m3,m4,m5] # ,m6,m7,m8] #  m9,m10]
 
-# THRESHOLD TO STOP BETTING.
+# TODO: THRESHOLD TO STOP BETTING.
 #    [1.4                 6.7  4    1.5  1.5  4    6.7       0              0         5.5
 #    [p    np   c    nc   p4   p5   p6   p8   p9   p10  o4   o5   o6   o8   o9   o10  f]
 t1 = [100, 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0]
@@ -61,7 +69,9 @@ t5 = [100, 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ,
 t6 = [100, 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0]
 t7 = [100, 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0]
 
-# Player strategies
+# TODO: Change strategy mid-way through a game
+
+# SET PLAYER STRATS HERE
 s = [m4, m4, m4, m4]
 
 
@@ -77,6 +87,7 @@ def main():
     players = [Player(t=70000), Player(t=70000), Player(t=70000), Player(t=70000)]
     players = strat_init(players)
 
+    # Analyis / Data recording options!
     conv = False  # make sure NUM_MATCHES is correct
     hist = False
     test_run = False
@@ -398,6 +409,8 @@ for s1 in bbs:
     for s2 in bbs:
         s = [s1, s2, s2, s2]
         main()
+
+
 #for i in range(0, 10):
 #    t1 = i * 500 - 1500
  #   for j in range(0, 10):
